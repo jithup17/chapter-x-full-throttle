@@ -137,7 +137,7 @@ $("#ticketHeading").textContent =
 $("#ticketPaddock").textContent = `PADDOCK // ${visitor.paddock.toUpperCase()}`;
 
 const ticketImage = $("#ticketImage");
-ticketImage.src = `${visitor.ticket}?v=6`;
+ticketImage.src = `${visitor.ticket}?v=7`;
 ticketImage.alt = `${visitor.name} #${visitor.number} — Chapter X driver pass`;
 
 const downloadTicket = $("#downloadTicket");
@@ -167,7 +167,7 @@ grid.innerHTML = rivals
         aria-label="Open profile for ${safe(d.name)}"
       >
         <span class="driver-card__portrait">
-          <img src="${safe(d.portrait)}?v=6"
+          <img src="${safe(d.portrait)}?v=7"
                alt="${safe(d.name)} — car ${safe(d.number)}">
         </span>
 
@@ -268,6 +268,18 @@ function showDocument(name) {
 $$("[data-doc-tab]").forEach(button => {
   button.addEventListener("click", () => {
     showDocument(button.dataset.docTab);
+
+    if (button.dataset.docTab === "ticket") {
+      const passTab = $(".driver-pass-tab");
+      const badge = $(".driver-pass-tab__badge", passTab);
+
+      passTab?.classList.remove("needs-attention");
+      passTab?.classList.add("has-been-viewed");
+
+      if (badge) {
+        badge.innerHTML = "<i></i> VIEWED";
+      }
+    }
   });
 });
 
@@ -406,10 +418,10 @@ if (STAGES.includes(requestedStage)) {
 ========================================================= */
 
 [
-  "assets/invite-poster.png?v=6",
-  "assets/race-control-letter.png?v=6",
-  `${visitor.ticket}?v=6`,
-  ...Object.values(DRIVERS).map(d => `${d.portrait}?v=6`)
+  "assets/invite-poster.png?v=7",
+  "assets/race-control-letter.png?v=7",
+  `${visitor.ticket}?v=7`,
+  ...Object.values(DRIVERS).map(d => `${d.portrait}?v=7`)
 ].forEach(src => {
   const img = new Image();
   img.src = src;

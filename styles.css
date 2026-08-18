@@ -1956,3 +1956,264 @@ img {
     transform: none;
   }
 }
+
+
+/* =========================================================
+   v7 // FIT THE WHOLE DOCUMENT + DRIVER PASS ATTENTION
+========================================================= */
+
+/*
+  The letter should be seen as a complete document, not a zoomed crop.
+  Force the image to size itself against BOTH available dimensions.
+*/
+.document-view.is-current {
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.art-frame--letter {
+  min-height: 0 !important;
+  height: 100% !important;
+  padding: 10px 18px !important;
+  overflow: hidden !important;
+}
+
+.art-frame--letter img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  margin: 0 auto !important;
+}
+
+.art-frame--ticket {
+  min-height: 0 !important;
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+.art-frame--ticket img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+}
+
+
+/* ---------------------------------------------------------
+   DRIVER PASS TAB
+   Attention-grabbing without looking like an ad/banner.
+--------------------------------------------------------- */
+
+.driver-pass-tab {
+  position: relative;
+  min-width: 176px;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  overflow: visible !important;
+}
+
+.driver-pass-tab__copy {
+  position: relative;
+  z-index: 2;
+  white-space: nowrap;
+}
+
+.driver-pass-tab__badge {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 6px;
+  border: 1px solid rgba(255,196,0,.28);
+  color: var(--yellow);
+  background: rgba(255,196,0,.06);
+  font-size: 5px;
+  font-weight: 1000;
+  letter-spacing: .12em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.driver-pass-tab__badge i {
+  width: 5px;
+  height: 5px;
+  flex: 0 0 5px;
+  border-radius: 50%;
+  background: var(--yellow);
+  box-shadow: 0 0 8px rgba(255,196,0,.72);
+}
+
+.driver-pass-tab.needs-attention {
+  color: #eef3f8;
+  border-color: rgba(255,196,0,.52);
+  background:
+    linear-gradient(90deg, rgba(255,196,0,.075), rgba(255,255,255,.025));
+  animation: passTabBorder 2.7s ease-in-out infinite;
+}
+
+.driver-pass-tab.needs-attention::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  pointer-events: none;
+  border: 1px solid rgba(255,196,0,.0);
+  box-shadow: 0 0 0 0 rgba(255,196,0,0);
+  animation: passTabHalo 2.7s ease-out infinite;
+}
+
+.driver-pass-tab.needs-attention::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  width: 30%;
+  left: -45%;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,219,92,.22),
+    transparent
+  );
+  transform: skewX(-20deg);
+  animation: passTabSweep 3.4s ease-in-out infinite;
+}
+
+.driver-pass-tab.needs-attention .driver-pass-tab__badge {
+  animation: passBadgeLift 2.7s var(--ease) infinite;
+}
+
+.driver-pass-tab.needs-attention .driver-pass-tab__badge i {
+  animation: signalPulse 1.65s ease-in-out infinite;
+}
+
+@keyframes passTabBorder {
+  0%, 100% {
+    border-color: rgba(255,196,0,.34);
+    box-shadow: inset 0 0 0 rgba(255,196,0,0);
+  }
+  50% {
+    border-color: rgba(255,196,0,.94);
+    box-shadow:
+      inset 0 0 18px rgba(255,196,0,.055),
+      0 0 16px rgba(255,196,0,.11);
+  }
+}
+
+@keyframes passTabHalo {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(1);
+    border-color: rgba(255,196,0,0);
+  }
+  42% {
+    opacity: .7;
+    transform: scale(1.015);
+    border-color: rgba(255,196,0,.30);
+  }
+  68% {
+    opacity: 0;
+    transform: scale(1.04);
+    border-color: rgba(255,196,0,0);
+  }
+}
+
+@keyframes passTabSweep {
+  0%, 56% {
+    left: -45%;
+    opacity: 0;
+  }
+  64% {
+    opacity: 1;
+  }
+  82% {
+    left: 118%;
+    opacity: .55;
+  }
+  100% {
+    left: 118%;
+    opacity: 0;
+  }
+}
+
+@keyframes passBadgeLift {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  48% {
+    transform: translateX(2px);
+  }
+}
+
+/* After the guest opens it, it becomes calm and "acknowledged". */
+.driver-pass-tab.has-been-viewed:not(.is-current) {
+  color: #aebcc8;
+  border-color: rgba(67,209,125,.28);
+}
+
+.driver-pass-tab.has-been-viewed:not(.is-current) .driver-pass-tab__badge {
+  color: #70df9f;
+  border-color: rgba(67,209,125,.25);
+  background: rgba(67,209,125,.055);
+}
+
+.driver-pass-tab.has-been-viewed:not(.is-current) .driver-pass-tab__badge i {
+  background: #43d17d;
+  box-shadow: 0 0 8px rgba(67,209,125,.55);
+}
+
+/* Active still follows the yellow Race Control tab language. */
+.driver-pass-tab.is-current .driver-pass-tab__badge {
+  color: #06162a;
+  border-color: rgba(6,22,42,.20);
+  background: rgba(6,22,42,.08);
+}
+
+.driver-pass-tab.is-current .driver-pass-tab__badge i {
+  background: #06162a;
+  box-shadow: none;
+}
+
+
+/* On shorter desktop screens, leave document/action spacing predictable. */
+@media (max-height: 860px) and (min-width: 851px) {
+  .race-panel {
+    gap: 9px !important;
+  }
+
+  .art-frame--letter {
+    padding: 6px 14px !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .driver-pass-tab {
+    min-width: 0;
+    gap: 6px;
+  }
+
+  .driver-pass-tab__badge {
+    padding: 3px 4px;
+    font-size: 4.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .driver-pass-tab.needs-attention,
+  .driver-pass-tab.needs-attention::before,
+  .driver-pass-tab.needs-attention::after,
+  .driver-pass-tab.needs-attention .driver-pass-tab__badge,
+  .driver-pass-tab.needs-attention .driver-pass-tab__badge i {
+    animation: none !important;
+  }
+}

@@ -99,3 +99,14 @@ The old `YOUR GARAGE` badge is no longer rendered because the visitor's own card
 - Active yellow buttons/navigation receive a subtle periodic light sweep.
 - Section numbers get a very soft yellow glow.
 - Motion respects `prefers-reduced-motion`.
+
+
+## v7 changes
+- The Race Control letter/pass artwork is forced to `object-fit: contain` in both dimensions so the full document stays centered instead of appearing zoomed/cropped.
+- The inactive `DRIVER PASS` tab now has a premium attention state:
+  - restrained gold border pulse
+  - subtle light sweep
+  - pulsing gold signal dot
+  - `PERSONALIZED` micro-badge
+- Once the guest opens Driver Pass, the attention animation stops and the badge changes to `VIEWED`.
+- The existing green DRIVER VERIFIED animation is unchanged.
