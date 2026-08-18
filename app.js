@@ -7,6 +7,15 @@ const drivers = {
   likith:   { name: 'Likith',   number: '04', tagline: 'Bavarian Bullet', ticket: 'assets/tickets/likith.png' }
 };
 
+const stageOrder = ['cover', 'poster', 'letter', 'ticket'];
+const stages = [...document.querySelectorAll('[data-stage]')];
+const progressButtons = [...document.querySelectorAll('[data-jump]')];
+const envelope = document.getElementById('envelope');
+const openCta = document.getElementById('openCta');
+const restart = document.getElementById('restart');
+let currentStage = 0;
+let opening = false;
+
 function driverFromLocation() {
   const params = new URLSearchParams(location.search);
   const query = (params.get('driver') || '').toLowerCase().trim();
@@ -20,151 +29,62 @@ function driverFromLocation() {
 const key = driverFromLocation();
 const driver = drivers[key];
 
-const envelope = document.getElementById('envelope');
-const overlay = document.getElementById('briefingOverlay');
-const modal = overlay.querySelector('.briefing-modal');
-const slides = [...document.querySelectorAll('.slide')];
-const dots = [...document.querySelectorAll('[data-slide-to]')];
-const prevSlide = document.getElementById('prevSlide');
-const nextSlide = document.getElementById('nextSlide');
-const briefingStage = document.getElementById('briefingStage');
+document.title = `${driver.name} // Chapter X: Full Throttle`;
+document.getElementById('headerDriver').textContent = `DRIVER ${driver.number}`;
+document.getElementById('heroNumber').textContent = driver.number;
+document.getElementById('heroName').textContent = driver.name.toUpperCase();
+document.getElementById('heroTag').textContent = `“${driver.tagline.toUpperCase()}”`;
+document.getElementById('paperDriver').textContent = `${driver.name.toUpperCase()} // ${driver.number}`;
+document.getElementById('railDriver').textContent = `${driver.name.toUpperCase()} // ${driver.number}`;
+document.getElementById('driverTitle').textContent = `${driver.name.toUpperCase()} #${driver.number} // “${driver.tagline.toUpperCase()}”`;
+
 const ticketImage = document.getElementById('ticketImage');
 const downloadTicket = document.getElementById('downloadTicket');
-const sliderShell = document.getElementById('sliderShell');
+ticketImage.src = driver.ticket;
+ticketImage.alt = `${driver.name} #${driver.number} — ${driver.tagline} — Chapter X driver pass`;
+downloadTicket.href = driver.ticket;
+downloadTicket.download = `Chapter-X-${driver.name.replace(/\s+/g, '-')}-${driver.number}.png`;
 
-let currentSlide = 0;
-let opening = false;
-let touchStartX = null;
+['assets/invite-poster.png', 'assets/race-control-letter.png', driver.ticket].forEach(src => {
+  const img = new Image();
+  img.src = src;
+});
 
-function applyDriver() {
-  document.title = `${driver.name} // Chapter X: Full Throttle`;
-  document.getElementById('headerDriver').textContent = `DRIVER ${driver.number}`;
-  document.getElementById('heroNumber').textContent = driver.number;
-  document.getElementById('heroName').textContent = driver.name.toUpperCase();
-  document.getElementById('heroTag').textContent = `“${driver.tagline.toUpperCase()}”`;
-  document.getElementById('paperDriver').textContent = `${driver.name.toUpperCase()} // ${driver.number}`;
-  document.getElementById('modalDriver').textContent = driver.name.toUpperCase();
-  document.getElementById('modalNumber').textContent = driver.number;
-  document.getElementById('driverTitle').textContent = `${driver.name.toUpperCase()} #${driver.number} // “${driver.tagline.toUpperCase()}”`;
-
-  ticketImage.src = driver.ticket;
-  ticketImage.alt = `${driver.name} #${driver.number} — ${driver.tagline} — Chapter X driver pass`;
-  downloadTicket.href = driver.ticket;
-  downloadTicket.download = `Chapter-X-${driver.name.replace(/\s+/g, '-')}-${driver.number}.png`;
+function showStage(target) {
+  const index = typeof target === 'number' ? target : stageOrder.indexOf(target);
+  if (index < 0) return;
+  currentStage = Math.max(0, Math.min(stageOrder.length - 1, index));
+  stages.forEach((stage, i) => stage.classList.toggle('is-active', i === currentStage));
+  progressButtons.forEach((btn, i) => btn.classList.toggle('is-current', i === currentStage));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function preload() {
-  ['assets/invite-poster.png', 'assets/race-control-letter.png', driver.ticket].forEach(src => {
-    const img = new Image();
-    img.src = src;
-  });
-}
-
-function showSlide(index, direction = 0) {
-  const next = Math.max(0, Math.min(slides.length - 1, index));
-  if (next === currentSlide && slides[next].classList.contains('is-active')) return;
-
-  const old = slides[currentSlide];
-  const incoming = slides[next];
-
-  old.classList.remove('is-active', 'from-left', 'from-right', 'to-left', 'to-right');
-  incoming.classList.remove('is-active', 'from-left', 'from-right', 'to-left', 'to-right');
-
-  if (direction > 0) {
-    old.classList.add('to-left');
-    incoming.classList.add('from-right');
-  } else if (direction < 0) {
-    old.classList.add('to-right');
-    incoming.classList.add('from-left');
-  }
-
-  requestAnimationFrame(() => incoming.classList.add('is-active'));
-  currentSlide = next;
-
-  dots.forEach((dot, i) => dot.classList.toggle('is-current', i === currentSlide));
-  const label = slides[currentSlide].dataset.label;
-  briefingStage.textContent = `${label} // ${String(currentSlide + 1).padStart(2, '0')} OF 03`;
-  prevSlide.disabled = currentSlide === 0;
-  nextSlide.disabled = currentSlide === slides.length - 1;
-  downloadTicket.classList.toggle('is-visible', currentSlide === slides.length - 1);
-
-  window.setTimeout(() => {
-    slides.forEach((slide, i) => {
-      if (i !== currentSlide) slide.classList.remove('from-left', 'from-right', 'to-left', 'to-right');
-    });
-  }, 520);
-}
-
-function openBriefing() {
-  if (opening || overlay.classList.contains('is-open')) return;
+async function openEnvelope() {
+  if (opening || currentStage !== 0) return;
   opening = true;
   envelope.classList.add('is-opening');
-  document.body.classList.add('is-opening-briefing');
-
-  window.setTimeout(() => {
-    overlay.classList.add('is-open');
-    overlay.setAttribute('aria-hidden', 'false');
-    document.body.classList.add('briefing-open');
-    showSlide(0);
-    modal.focus?.();
-  }, 720);
-
-  window.setTimeout(() => {
-    document.body.classList.remove('is-opening-briefing');
-    opening = false;
-  }, 1250);
+  openCta.textContent = 'ACCESSING RACE CONTROL…';
+  await new Promise(resolve => setTimeout(resolve, 1050));
+  showStage('poster');
+  envelope.classList.remove('is-opening');
+  openCta.innerHTML = '<span class="cta-icon">▶</span> BREAK SEAL // OPEN INVITATION';
+  opening = false;
 }
 
-function closeBriefing() {
-  overlay.classList.remove('is-open');
-  overlay.setAttribute('aria-hidden', 'true');
-  document.body.classList.remove('briefing-open');
-  window.setTimeout(() => {
-    envelope.classList.remove('is-opening');
-    showSlide(0);
-  }, 420);
-}
+envelope.addEventListener('click', openEnvelope);
+openCta.addEventListener('click', openEnvelope);
 
-envelope.addEventListener('click', openBriefing);
-document.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeBriefing));
-
-prevSlide.addEventListener('click', () => showSlide(currentSlide - 1, -1));
-nextSlide.addEventListener('click', () => showSlide(currentSlide + 1, 1));
-dots.forEach(dot => dot.addEventListener('click', () => {
-  const target = Number(dot.dataset.slideTo);
-  showSlide(target, target > currentSlide ? 1 : -1);
-}));
-
-slides.forEach(slide => {
-  slide.querySelector('.media-card').addEventListener('click', () => {
-    if (currentSlide < slides.length - 1) showSlide(currentSlide + 1, 1);
-  });
+document.querySelectorAll('[data-next]').forEach(btn => {
+  btn.addEventListener('click', () => showStage(btn.dataset.next));
 });
-
-sliderShell.addEventListener('touchstart', event => {
-  touchStartX = event.changedTouches[0].clientX;
-}, { passive: true });
-
-sliderShell.addEventListener('touchend', event => {
-  if (touchStartX === null) return;
-  const delta = event.changedTouches[0].clientX - touchStartX;
-  touchStartX = null;
-  if (Math.abs(delta) < 42) return;
-  if (delta < 0 && currentSlide < slides.length - 1) showSlide(currentSlide + 1, 1);
-  if (delta > 0 && currentSlide > 0) showSlide(currentSlide - 1, -1);
-}, { passive: true });
+document.querySelectorAll('[data-prev]').forEach(btn => {
+  btn.addEventListener('click', () => showStage(currentStage - 1));
+});
+progressButtons.forEach(btn => btn.addEventListener('click', () => showStage(btn.dataset.jump)));
+restart.addEventListener('click', () => showStage('cover'));
 
 document.addEventListener('keydown', event => {
-  if (!overlay.classList.contains('is-open')) {
-    if (event.key === 'Enter' || event.key === ' ') openBriefing();
-    return;
-  }
-
-  if (event.key === 'Escape') closeBriefing();
-  if (event.key === 'ArrowRight' && currentSlide < slides.length - 1) showSlide(currentSlide + 1, 1);
-  if (event.key === 'ArrowLeft' && currentSlide > 0) showSlide(currentSlide - 1, -1);
+  if ((event.key === 'Enter' || event.key === ' ') && currentStage === 0) openEnvelope();
+  if (event.key === 'ArrowRight' && currentStage < stageOrder.length - 1) showStage(currentStage + 1);
+  if (event.key === 'ArrowLeft' && currentStage > 0) showStage(currentStage - 1);
 });
-
-applyDriver();
-preload();
-showSlide(0);
