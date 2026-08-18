@@ -2217,3 +2217,142 @@ img {
     animation: none !important;
   }
 }
+
+
+/* =========================================================
+   v8 // HARD FIX: FULL LETTER VISIBLE, NEVER ZOOMED/CROPPED
+========================================================= */
+
+/*
+  Percentage heights on a CSS-grid item can still resolve against
+  intrinsic image sizing. Use a real viewport-based document window
+  instead, then let the image size from HEIGHT ONLY.
+*/
+
+.race-panel .document-view.is-current {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+/* Portrait Race Control letter */
+.race-panel .document-view[data-doc-view="letter"] .art-frame--letter {
+  flex: 0 1 auto !important;
+  width: 100% !important;
+  height: clamp(260px, 46svh, 500px) !important;
+  max-height: calc(100svh - 365px) !important;
+  min-height: 0 !important;
+  padding: 8px 14px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  overflow: hidden !important;
+}
+
+.race-panel .document-view[data-doc-view="letter"] .art-frame--letter img {
+  display: block !important;
+
+  /* HEIGHT is the controlling dimension. */
+  width: auto !important;
+  height: 100% !important;
+
+  max-width: 100% !important;
+  max-height: 100% !important;
+
+  object-fit: contain !important;
+  object-position: 50% 50% !important;
+
+  margin: 0 auto !important;
+  flex: 0 1 auto !important;
+}
+
+/* Landscape personalized driver pass */
+.race-panel .document-view[data-doc-view="ticket"] {
+  flex-direction: column !important;
+}
+
+.race-panel .document-view[data-doc-view="ticket"] .ticket-heading {
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.race-panel .document-view[data-doc-view="ticket"] .art-frame--ticket {
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  height: clamp(230px, 38svh, 430px) !important;
+  max-height: calc(100svh - 405px) !important;
+  min-height: 0 !important;
+  padding: 8px 12px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  overflow: hidden !important;
+}
+
+.race-panel .document-view[data-doc-view="ticket"] .art-frame--ticket img {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: 50% 50% !important;
+  margin: auto !important;
+}
+
+/* Keep the document centered in the large Race Control viewport. */
+.race-panel {
+  align-content: stretch !important;
+}
+
+/* On very tall screens, don't let the letter become absurdly large. */
+@media (min-height: 1050px) and (min-width: 851px) {
+  .race-panel .document-view[data-doc-view="letter"] .art-frame--letter {
+    height: 500px !important;
+  }
+}
+
+/* On short laptop screens, shrink further so footer/buttons always remain. */
+@media (max-height: 760px) and (min-width: 851px) {
+  .race-panel .document-view[data-doc-view="letter"] .art-frame--letter {
+    height: 34svh !important;
+    max-height: calc(100svh - 350px) !important;
+  }
+
+  .race-panel .document-view[data-doc-view="ticket"] .art-frame--ticket {
+    height: 30svh !important;
+    max-height: calc(100svh - 390px) !important;
+  }
+}
+
+/* Mobile returns to natural document flow. */
+@media (max-width: 850px) {
+  .race-panel .document-view.is-current {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .race-panel .document-view[data-doc-view="letter"] .art-frame--letter,
+  .race-panel .document-view[data-doc-view="ticket"] .art-frame--ticket {
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .race-panel .document-view[data-doc-view="letter"] .art-frame--letter img,
+  .race-panel .document-view[data-doc-view="ticket"] .art-frame--ticket img {
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+}

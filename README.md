@@ -110,3 +110,18 @@ The old `YOUR GARAGE` badge is no longer rendered because the visitor's own card
   - `PERSONALIZED` micro-badge
 - Once the guest opens Driver Pass, the attention animation stops and the badge changes to `VIEWED`.
 - The existing green DRIVER VERIFIED animation is unchanged.
+
+
+## v8 hard document-fit fix
+The v7 percentage-height approach could still let the letter's intrinsic image
+dimensions influence the CSS Grid track in Chrome. v8 removes that ambiguity.
+
+Desktop Race Control now:
+- gives the letter an explicit viewport-based height
+- sizes the portrait letter from HEIGHT, not width
+- keeps the entire page visible with `object-fit: contain`
+- centers the document horizontally and vertically
+- keeps action buttons below the document visible
+- uses a separate fit rule for the landscape Driver Pass
+- keeps the v7 personalized Driver Pass attention animation
+- keeps the green DRIVER VERIFIED animation

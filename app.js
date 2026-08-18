@@ -137,7 +137,7 @@ $("#ticketHeading").textContent =
 $("#ticketPaddock").textContent = `PADDOCK // ${visitor.paddock.toUpperCase()}`;
 
 const ticketImage = $("#ticketImage");
-ticketImage.src = `${visitor.ticket}?v=7`;
+ticketImage.src = `${visitor.ticket}?v=8`;
 ticketImage.alt = `${visitor.name} #${visitor.number} — Chapter X driver pass`;
 
 const downloadTicket = $("#downloadTicket");
@@ -167,7 +167,7 @@ grid.innerHTML = rivals
         aria-label="Open profile for ${safe(d.name)}"
       >
         <span class="driver-card__portrait">
-          <img src="${safe(d.portrait)}?v=7"
+          <img src="${safe(d.portrait)}?v=8"
                alt="${safe(d.name)} — car ${safe(d.number)}">
         </span>
 
@@ -418,10 +418,10 @@ if (STAGES.includes(requestedStage)) {
 ========================================================= */
 
 [
-  "assets/invite-poster.png?v=7",
-  "assets/race-control-letter.png?v=7",
-  `${visitor.ticket}?v=7`,
-  ...Object.values(DRIVERS).map(d => `${d.portrait}?v=7`)
+  "assets/invite-poster.png?v=8",
+  "assets/race-control-letter.png?v=8",
+  `${visitor.ticket}?v=8`,
+  ...Object.values(DRIVERS).map(d => `${d.portrait}?v=8`)
 ].forEach(src => {
   const img = new Image();
   img.src = src;
