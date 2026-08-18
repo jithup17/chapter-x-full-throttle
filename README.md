@@ -125,3 +125,7 @@ Desktop Race Control now:
 - uses a separate fit rule for the landscape Driver Pass
 - keeps the v7 personalized Driver Pass attention animation
 - keeps the green DRIVER VERIFIED animation
+
+
+## v9 date update
+The live site now shows **AUG 29** together with **4:00 PM** on Grid Call, Invite, Race Control, and the desktop status bar.
