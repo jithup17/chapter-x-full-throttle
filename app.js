@@ -137,7 +137,7 @@ $("#ticketHeading").textContent =
 $("#ticketPaddock").textContent = `PADDOCK // ${visitor.paddock.toUpperCase()}`;
 
 const ticketImage = $("#ticketImage");
-ticketImage.src = `${visitor.ticket}?v=4`;
+ticketImage.src = `${visitor.ticket}?v=5`;
 ticketImage.alt = `${visitor.name} #${visitor.number} — Chapter X driver pass`;
 
 const downloadTicket = $("#downloadTicket");
@@ -152,21 +152,22 @@ downloadTicket.download =
 
 const grid = $("#driverGrid");
 
-grid.innerHTML = Object.entries(DRIVERS)
-  .sort((a, b) => a[1].order - b[1].order)
-  .map(([key, d]) => {
-    const ownGarage = key === visitorKey;
+const rivals = Object.entries(DRIVERS)
+  .filter(([key]) => key !== visitorKey)
+  .sort((a, b) => a[1].order - b[1].order);
 
+grid.innerHTML = rivals
+  .map(([key, d]) => {
     return `
       <button
-        class="driver-card${ownGarage ? " is-you" : ""}"
+        class="driver-card"
         type="button"
         data-driver-card="${safe(key)}"
         aria-expanded="false"
         aria-label="Open profile for ${safe(d.name)}"
       >
         <span class="driver-card__portrait">
-          <img src="${safe(d.portrait)}?v=4"
+          <img src="${safe(d.portrait)}?v=5"
                alt="${safe(d.name)} — car ${safe(d.number)}">
         </span>
 
@@ -174,10 +175,8 @@ grid.innerHTML = Object.entries(DRIVERS)
 
         <span class="driver-card__number">${safe(d.number)}</span>
 
-        ${ownGarage ? `<span class="your-garage">YOUR GARAGE</span>` : ""}
-
         <span class="driver-card__front">
-          <small>DRIVER ${String(d.order).padStart(2, "0")}</small>
+          <small>RIVAL // CAR ${safe(d.number)}</small>
           <strong>${safe(d.name)}</strong>
           <span>${safe(d.surname)}</span>
           <em>“${safe(d.tagline)}”</em>
@@ -407,10 +406,10 @@ if (STAGES.includes(requestedStage)) {
 ========================================================= */
 
 [
-  "assets/invite-poster.png?v=4",
-  "assets/race-control-letter.png?v=4",
-  `${visitor.ticket}?v=4`,
-  ...Object.values(DRIVERS).map(d => `${d.portrait}?v=4`)
+  "assets/invite-poster.png?v=5",
+  "assets/race-control-letter.png?v=5",
+  `${visitor.ticket}?v=5`,
+  ...Object.values(DRIVERS).map(d => `${d.portrait}?v=5`)
 ].forEach(src => {
   const img = new Image();
   img.src = src;

@@ -73,3 +73,18 @@ Then commit. GitHub Pages should deploy automatically if Pages is already config
 
 ## Asset cache
 This build references CSS/JS/artwork with `?v=4` so browsers do not keep showing stale versions after you replace files.
+
+
+## v5 change
+The Grid now excludes the visitor themselves.
+
+Examples:
+- Rohit sees Siva Ram, Shashank, Vijay, Omkar, and Likith.
+- Siva Ram sees Rohit, Shashank, Vijay, Omkar, and Likith.
+- Every personalized link shows exactly 5 rivals.
+
+Grid wording is now:
+- `SCOUTING REPORT // 5 RIVALS CONFIRMED`
+- `MEET THE COMPETITION`
+
+The old `YOUR GARAGE` badge is no longer rendered because the visitor's own card is not shown in the competition section.
