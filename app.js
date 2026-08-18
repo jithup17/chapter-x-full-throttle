@@ -1,90 +1,417 @@
-const drivers = {
-  rohit:    { name: 'Rohit',    number: '13', tagline: 'Boost Bandit',    ticket: 'assets/tickets/rohit.png' },
-  siva:     { name: 'Siva Ram', number: '30', tagline: 'Lap Legend',      ticket: 'assets/tickets/siva.png' },
-  shashank: { name: 'Shashank', number: '44', tagline: 'V8 Outlaw',       ticket: 'assets/tickets/shashank.png' },
-  vijay:    { name: 'Vijay',    number: '08', tagline: 'Swedish Missile', ticket: 'assets/tickets/vijay.png' },
-  omkar:    { name: 'Omkar',    number: '09', tagline: 'Wagon Weapon',    ticket: 'assets/tickets/omkar.png' },
-  likith:   { name: 'Likith',   number: '04', tagline: 'Bavarian Bullet', ticket: 'assets/tickets/likith.png' }
+const DRIVERS = {
+  rohit: {
+    order: 1,
+    name: "Rohit",
+    surname: "Vedachalam",
+    number: "13",
+    tagline: "Boost Bandit",
+    paddock: "Main Character Energy",
+    threat: "QUESTIONABLE",
+    control: "Do not underestimate.",
+    note: "Claims this is “just for fun.” Race Control has reviewed that statement and remains unconvinced.",
+    portrait: "assets/drivers/rohit.jpg",
+    ticket: "assets/tickets/rohit.png"
+  },
+
+  siva: {
+    order: 2,
+    name: "Siva Ram",
+    surname: "Tallapalli",
+    number: "30",
+    tagline: "Lap Legend",
+    paddock: "Smooth Operator",
+    threat: "CALM BUT CONCERNING",
+    control: "Smooth is still fast.",
+    note: "Minimal drama. Maximum possibility of quietly appearing on the podium.",
+    portrait: "assets/drivers/siva.jpg",
+    ticket: "assets/tickets/siva.png"
+  },
+
+  shashank: {
+    order: 3,
+    name: "Shashank",
+    surname: "Shivarudrappa",
+    number: "44",
+    tagline: "V8 Outlaw",
+    paddock: "Corner Specialist",
+    threat: "UNCONFIRMED",
+    control: "Telemetry remains inconclusive.",
+    note: "Could be here to win. Could be here for snacks. Either way, the apexes have been warned.",
+    portrait: "assets/drivers/shashank.jpg",
+    ticket: "assets/tickets/shashank.png"
+  },
+
+  vijay: {
+    order: 4,
+    name: "Vijay",
+    surname: "Malagi",
+    number: "08",
+    tagline: "Swedish Missile",
+    paddock: "Victory Mode",
+    threat: "DECEPTIVELY HIGH",
+    control: "Do not trust the casual approach.",
+    note: "Arrived with “Victory Mode” already enabled. Race Control has questions.",
+    portrait: "assets/drivers/vijay.jpg",
+    ticket: "assets/tickets/vijay.png"
+  },
+
+  omkar: {
+    order: 5,
+    name: "Omkar",
+    surname: "Kulkarni",
+    number: "09",
+    tagline: "Wagon Weapon",
+    paddock: "Strategy Pending",
+    threat: "DEVELOPING",
+    control: "Keep under observation.",
+    note: "Strategy pending. Confidence, however, appears fully deployed.",
+    portrait: "assets/drivers/omkar.jpg",
+    ticket: "assets/tickets/omkar.png"
+  },
+
+  likith: {
+    order: 6,
+    name: "Likith",
+    surname: "Gowda",
+    number: "04",
+    tagline: "Bavarian Bullet",
+    paddock: "Velocity Mode",
+    threat: "UNKNOWN",
+    control: "Proceed with unnecessary caution.",
+    note: "No useful telemetry. Somehow that makes this worse.",
+    portrait: "assets/drivers/likith.jpg",
+    ticket: "assets/tickets/likith.png"
+  }
 };
 
-const stageOrder = ['cover', 'poster', 'letter', 'ticket'];
-const stages = [...document.querySelectorAll('[data-stage]')];
-const progressButtons = [...document.querySelectorAll('[data-jump]')];
-const envelope = document.getElementById('envelope');
-const openCta = document.getElementById('openCta');
-const restart = document.getElementById('restart');
-let currentStage = 0;
-let opening = false;
+const STAGES = ["cover", "invite", "racecontrol", "grid"];
 
-function driverFromLocation() {
-  const params = new URLSearchParams(location.search);
-  const query = (params.get('driver') || '').toLowerCase().trim();
-  if (drivers[query]) return query;
+const $ = (selector, root = document) => root.querySelector(selector);
+const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
-  const segments = location.pathname.split('/').filter(Boolean);
-  const last = (segments.at(-1) || '').toLowerCase();
-  return drivers[last] ? last : 'rohit';
+function safe(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
-const key = driverFromLocation();
-const driver = drivers[key];
+function resolveDriverKey() {
+  const params = new URLSearchParams(location.search);
+  const query = (params.get("driver") || "").trim().toLowerCase();
 
-document.title = `${driver.name} // Chapter X: Full Throttle`;
-document.getElementById('headerDriver').textContent = `DRIVER ${driver.number}`;
-document.getElementById('heroNumber').textContent = driver.number;
-document.getElementById('heroName').textContent = driver.name.toUpperCase();
-document.getElementById('heroTag').textContent = `“${driver.tagline.toUpperCase()}”`;
-document.getElementById('paperDriver').textContent = `${driver.name.toUpperCase()} // ${driver.number}`;
-document.getElementById('railDriver').textContent = `${driver.name.toUpperCase()} // ${driver.number}`;
-document.getElementById('driverTitle').textContent = `${driver.name.toUpperCase()} #${driver.number} // “${driver.tagline.toUpperCase()}”`;
+  if (DRIVERS[query]) return query;
 
-const ticketImage = document.getElementById('ticketImage');
-const downloadTicket = document.getElementById('downloadTicket');
-ticketImage.src = driver.ticket;
-ticketImage.alt = `${driver.name} #${driver.number} — ${driver.tagline} — Chapter X driver pass`;
-downloadTicket.href = driver.ticket;
-downloadTicket.download = `Chapter-X-${driver.name.replace(/\s+/g, '-')}-${driver.number}.png`;
+  const parts = location.pathname.split("/").filter(Boolean);
+  const last = (parts.at(-1) || "").toLowerCase();
 
-['assets/invite-poster.png', 'assets/race-control-letter.png', driver.ticket].forEach(src => {
-  const img = new Image();
-  img.src = src;
+  return DRIVERS[last] ? last : "rohit";
+}
+
+const visitorKey = resolveDriverKey();
+const visitor = DRIVERS[visitorKey];
+
+let currentStageIndex = 0;
+let envelopeBusy = false;
+let currentDocument = "letter";
+
+const stageEls = $$("[data-stage]");
+const navEls = $$("[data-stage-nav]");
+
+/* =========================================================
+   PERSONALIZATION
+========================================================= */
+
+document.title = `${visitor.name} // Chapter X: Full Throttle`;
+
+$("#headerDriver").textContent = `DRIVER ${visitor.number}`;
+$("#heroNumber").textContent = visitor.number;
+$("#heroName").textContent = visitor.name.toUpperCase();
+$("#heroTag").textContent = `“${visitor.tagline.toUpperCase()}”`;
+$("#paperDriver").textContent = `${visitor.name.toUpperCase()} // ${visitor.number}`;
+$("#railDriver").textContent = `${visitor.name.toUpperCase()} // ${visitor.number}`;
+$("#ticketHeading").textContent =
+  `${visitor.name.toUpperCase()} #${visitor.number} // “${visitor.tagline.toUpperCase()}”`;
+$("#ticketPaddock").textContent = `PADDOCK // ${visitor.paddock.toUpperCase()}`;
+
+const ticketImage = $("#ticketImage");
+ticketImage.src = `${visitor.ticket}?v=4`;
+ticketImage.alt = `${visitor.name} #${visitor.number} — Chapter X driver pass`;
+
+const downloadTicket = $("#downloadTicket");
+downloadTicket.href = visitor.ticket;
+downloadTicket.download =
+  `Chapter-X-${visitor.name.replace(/\s+/g, "-")}-${visitor.number}.png`;
+
+
+/* =========================================================
+   BUILD THE GRID
+========================================================= */
+
+const grid = $("#driverGrid");
+
+grid.innerHTML = Object.entries(DRIVERS)
+  .sort((a, b) => a[1].order - b[1].order)
+  .map(([key, d]) => {
+    const ownGarage = key === visitorKey;
+
+    return `
+      <button
+        class="driver-card${ownGarage ? " is-you" : ""}"
+        type="button"
+        data-driver-card="${safe(key)}"
+        aria-expanded="false"
+        aria-label="Open profile for ${safe(d.name)}"
+      >
+        <span class="driver-card__portrait">
+          <img src="${safe(d.portrait)}?v=4"
+               alt="${safe(d.name)} — car ${safe(d.number)}">
+        </span>
+
+        <span class="driver-card__gradient"></span>
+
+        <span class="driver-card__number">${safe(d.number)}</span>
+
+        ${ownGarage ? `<span class="your-garage">YOUR GARAGE</span>` : ""}
+
+        <span class="driver-card__front">
+          <small>DRIVER ${String(d.order).padStart(2, "0")}</small>
+          <strong>${safe(d.name)}</strong>
+          <span>${safe(d.surname)}</span>
+          <em>“${safe(d.tagline)}”</em>
+          <b>VIEW RIVAL PROFILE →</b>
+        </span>
+
+        <span class="driver-card__profile">
+          <small>RIVAL PROFILE // ${safe(d.number)}</small>
+
+          <strong>${safe(d.name)}</strong>
+          <span class="profile-surname">${safe(d.surname)}</span>
+
+          <span class="profile-row">
+            <label>THREAT LEVEL</label>
+            <b>${safe(d.threat)}</b>
+          </span>
+
+          <span class="profile-row">
+            <label>RACE CONTROL</label>
+            <em>${safe(d.control)}</em>
+          </span>
+
+          <span class="profile-note">
+            <label>PADDOCK NOTE</label>
+            <span>${safe(d.note)}</span>
+          </span>
+
+          <span class="profile-paddock">
+            <label>PADDOCK STATUS</label>
+            <b>${safe(d.paddock).toUpperCase()}</b>
+          </span>
+
+          <span class="profile-cleared">
+            <i></i>
+            DRIVER CLEARED FOR COMPETITION
+          </span>
+        </span>
+      </button>
+    `;
+  })
+  .join("");
+
+$$("[data-driver-card]").forEach(card => {
+  card.addEventListener("click", () => {
+    const opening = !card.classList.contains("is-open");
+
+    $$("[data-driver-card]").forEach(other => {
+      other.classList.remove("is-open");
+      other.setAttribute("aria-expanded", "false");
+    });
+
+    if (opening) {
+      card.classList.add("is-open");
+      card.setAttribute("aria-expanded", "true");
+    }
+  });
 });
 
-function showStage(target) {
-  const index = typeof target === 'number' ? target : stageOrder.indexOf(target);
-  if (index < 0) return;
-  currentStage = Math.max(0, Math.min(stageOrder.length - 1, index));
-  stages.forEach((stage, i) => stage.classList.toggle('is-active', i === currentStage));
-  progressButtons.forEach((btn, i) => btn.classList.toggle('is-current', i === currentStage));
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+/* =========================================================
+   RACE CONTROL: LETTER / DRIVER PASS TABS
+========================================================= */
+
+function showDocument(name) {
+  currentDocument = name === "ticket" ? "ticket" : "letter";
+
+  $$("[data-doc-tab]").forEach(button => {
+    button.classList.toggle(
+      "is-current",
+      button.dataset.docTab === currentDocument
+    );
+  });
+
+  $$("[data-doc-view]").forEach(view => {
+    view.classList.toggle(
+      "is-current",
+      view.dataset.docView === currentDocument
+    );
+  });
+
+  const ticketMode = currentDocument === "ticket";
+
+  $("#raceHeading").textContent =
+    ticketMode ? "OFFICIAL DRIVER PASS" : "FROM RACE CONTROL";
+
+  downloadTicket.classList.toggle("is-hidden", !ticketMode);
 }
+
+$$("[data-doc-tab]").forEach(button => {
+  button.addEventListener("click", () => {
+    showDocument(button.dataset.docTab);
+  });
+});
+
+
+/* =========================================================
+   STAGE NAVIGATION
+========================================================= */
+
+function showStage(target, updateHash = true) {
+  const index = typeof target === "number"
+    ? target
+    : STAGES.indexOf(target);
+
+  if (index < 0) return;
+
+  currentStageIndex = Math.max(0, Math.min(STAGES.length - 1, index));
+
+  stageEls.forEach((stage, i) => {
+    stage.classList.toggle("is-active", i === currentStageIndex);
+  });
+
+  navEls.forEach((button, i) => {
+    button.classList.toggle("is-current", i === currentStageIndex);
+  });
+
+  $$("[data-driver-card]").forEach(card => {
+    card.classList.remove("is-open");
+    card.setAttribute("aria-expanded", "false");
+  });
+
+  if (updateHash) {
+    history.replaceState(
+      null,
+      "",
+      `${location.pathname}${location.search}#${STAGES[currentStageIndex]}`
+    );
+  }
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+$$("[data-stage-nav]").forEach(button => {
+  button.addEventListener("click", () => {
+    showStage(button.dataset.stageNav);
+  });
+});
+
+$$("[data-go]").forEach(button => {
+  button.addEventListener("click", () => {
+    showStage(button.dataset.go);
+  });
+});
+
+$$("[data-prev]").forEach(button => {
+  button.addEventListener("click", () => {
+    showStage(currentStageIndex - 1);
+  });
+});
+
+$("#replay").addEventListener("click", () => {
+  showDocument("letter");
+  showStage("cover");
+});
+
+
+/* =========================================================
+   ENVELOPE OPENING
+========================================================= */
 
 async function openEnvelope() {
-  if (opening || currentStage !== 0) return;
-  opening = true;
-  envelope.classList.add('is-opening');
-  openCta.textContent = 'ACCESSING RACE CONTROL…';
-  await new Promise(resolve => setTimeout(resolve, 1050));
-  showStage('poster');
-  envelope.classList.remove('is-opening');
-  openCta.innerHTML = '<span class="cta-icon">▶</span> BREAK SEAL // OPEN INVITATION';
-  opening = false;
+  if (envelopeBusy || currentStageIndex !== 0) return;
+
+  envelopeBusy = true;
+
+  const envelope = $("#envelope");
+  const openCall = $("#openCall");
+
+  envelope.classList.add("is-opening");
+  openCall.classList.add("is-working");
+  openCall.innerHTML = `<span>●</span> TRANSMISSION OPENING…`;
+
+  await new Promise(resolve => setTimeout(resolve, 1250));
+
+  showStage("invite");
+
+  await new Promise(resolve => setTimeout(resolve, 250));
+
+  envelope.classList.remove("is-opening");
+  openCall.classList.remove("is-working");
+  openCall.innerHTML = `<span>▶</span> BREAK SEAL // OPEN INVITATION`;
+
+  envelopeBusy = false;
 }
 
-envelope.addEventListener('click', openEnvelope);
-openCta.addEventListener('click', openEnvelope);
+$("#envelope").addEventListener("click", openEnvelope);
+$("#openCall").addEventListener("click", openEnvelope);
 
-document.querySelectorAll('[data-next]').forEach(btn => {
-  btn.addEventListener('click', () => showStage(btn.dataset.next));
-});
-document.querySelectorAll('[data-prev]').forEach(btn => {
-  btn.addEventListener('click', () => showStage(currentStage - 1));
-});
-progressButtons.forEach(btn => btn.addEventListener('click', () => showStage(btn.dataset.jump)));
-restart.addEventListener('click', () => showStage('cover'));
 
-document.addEventListener('keydown', event => {
-  if ((event.key === 'Enter' || event.key === ' ') && currentStage === 0) openEnvelope();
-  if (event.key === 'ArrowRight' && currentStage < stageOrder.length - 1) showStage(currentStage + 1);
-  if (event.key === 'ArrowLeft' && currentStage > 0) showStage(currentStage - 1);
+/* =========================================================
+   KEYBOARD
+========================================================= */
+
+document.addEventListener("keydown", event => {
+  const tag = document.activeElement?.tagName;
+  if (tag === "BUTTON" || tag === "A") return;
+
+  if (event.key === "ArrowRight" && currentStageIndex < STAGES.length - 1) {
+    showStage(currentStageIndex + 1);
+  }
+
+  if (event.key === "ArrowLeft" && currentStageIndex > 0) {
+    showStage(currentStageIndex - 1);
+  }
+
+  if ((event.key === "Enter" || event.key === " ") && currentStageIndex === 0) {
+    openEnvelope();
+  }
+});
+
+
+/* =========================================================
+   INITIAL HASH SUPPORT
+========================================================= */
+
+const requestedStage = location.hash.replace("#", "").toLowerCase();
+
+if (STAGES.includes(requestedStage)) {
+  showStage(requestedStage, false);
+} else {
+  showStage("cover", false);
+}
+
+
+/* =========================================================
+   PRELOAD THE IMPORTANT ART
+========================================================= */
+
+[
+  "assets/invite-poster.png?v=4",
+  "assets/race-control-letter.png?v=4",
+  `${visitor.ticket}?v=4`,
+  ...Object.values(DRIVERS).map(d => `${d.portrait}?v=4`)
+].forEach(src => {
+  const img = new Image();
+  img.src = src;
 });
