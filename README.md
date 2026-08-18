@@ -88,3 +88,14 @@ Grid wording is now:
 - `MEET THE COMPETITION`
 
 The old `YOUR GARAGE` badge is no longer rendered because the visitor's own card is not shown in the competition section.
+
+
+## v6 premium polish
+- Race Control document area now fits inside the viewport on desktop so the bottom buttons remain visible above the fixed navigation.
+- Letter and ticket artwork are vertically and horizontally centered.
+- `GRID CALL` has a restrained yellow live-signal pulse.
+- Yellow transmission dots pulse.
+- `DRIVER VERIFIED` now loops through a green-circle + animated check verification sequence.
+- Active yellow buttons/navigation receive a subtle periodic light sweep.
+- Section numbers get a very soft yellow glow.
+- Motion respects `prefers-reduced-motion`.

@@ -1594,3 +1594,365 @@ img {
     animation-iteration-count: 1 !important;
   }
 }
+
+
+/* =========================================================
+   v6 // VIEWPORT FIT + PREMIUM RACE CONTROL MOTION
+========================================================= */
+
+/*
+  Keep the document centered while reserving enough room for
+  the action buttons and the fixed four-tab navigation.
+*/
+.stage--panel {
+  min-height: calc(100svh - 64px);
+  padding: 26px 0 96px;
+}
+
+.shell {
+  min-height: 0;
+  height: calc(100svh - 64px - 26px - 96px);
+  max-height: 820px;
+}
+
+.panel {
+  min-height: 0;
+  height: 100%;
+}
+
+.race-panel {
+  min-height: 0;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+}
+
+.document-view,
+.document-view.is-current {
+  min-height: 0;
+}
+
+.document-view.is-current {
+  overflow: hidden;
+}
+
+.art-frame--letter {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding: 10px 14px;
+  place-items: center;
+}
+
+.art-frame--letter img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  margin: auto;
+}
+
+.art-frame--ticket {
+  min-height: 0;
+  height: 100%;
+  padding: 10px;
+}
+
+.art-frame--ticket img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.panel__actions {
+  position: relative;
+  z-index: 3;
+  min-height: 46px;
+  padding-top: 2px;
+}
+
+/* A little more room above the fixed bottom navigation. */
+.stage-nav {
+  bottom: max(12px, env(safe-area-inset-bottom));
+}
+
+
+/* ---------------- LIVE SIGNALS ---------------- */
+
+@keyframes signalPulse {
+  0%, 100% {
+    opacity: .72;
+    box-shadow: 0 0 0 0 rgba(255,196,0,.0),
+                0 0 8px rgba(255,196,0,.34);
+  }
+  45% {
+    opacity: 1;
+    box-shadow: 0 0 0 7px rgba(255,196,0,.0),
+                0 0 18px rgba(255,196,0,.90);
+  }
+}
+
+@keyframes textSignal {
+  0%, 100% {
+    color: #aab6c2;
+    text-shadow: 0 0 0 rgba(255,196,0,0);
+  }
+  48% {
+    color: var(--yellow);
+    text-shadow: 0 0 11px rgba(255,196,0,.50);
+  }
+}
+
+.topbar__status > i {
+  animation: signalPulse 2.2s ease-in-out infinite;
+}
+
+.grid-call-live {
+  animation: textSignal 2.2s ease-in-out infinite;
+}
+
+
+/* ---------------- VERIFIED CHECK LOOP ---------------- */
+
+.live-status--verified {
+  color: #c9d7d0;
+}
+
+.verified-ring {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(67,209,125,.45);
+  border-radius: 50%;
+  background: rgba(67,209,125,.08);
+  overflow: visible;
+}
+
+.verified-ring::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: #43d17d;
+  transform: scale(0);
+  opacity: 0;
+  animation: verifiedCircle 3.1s var(--ease) infinite;
+}
+
+.verified-ring::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border: 1px solid rgba(67,209,125,.52);
+  border-radius: inherit;
+  opacity: 0;
+  transform: scale(.55);
+  animation: verifiedHalo 3.1s ease-out infinite;
+}
+
+.verified-ring > span {
+  position: relative;
+  z-index: 2;
+  color: #04130b;
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 1000;
+  opacity: 0;
+  transform: scale(.25) rotate(-18deg);
+  animation: verifiedCheck 3.1s var(--ease) infinite;
+}
+
+@keyframes verifiedCircle {
+  0%, 14% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  24%, 72% {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 0 15px rgba(67,209,125,.52);
+  }
+  88%, 100% {
+    transform: scale(.72);
+    opacity: 0;
+  }
+}
+
+@keyframes verifiedCheck {
+  0%, 24% {
+    opacity: 0;
+    transform: scale(.25) rotate(-18deg);
+  }
+  34%, 72% {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+  88%, 100% {
+    opacity: 0;
+    transform: scale(.65) rotate(0);
+  }
+}
+
+@keyframes verifiedHalo {
+  0%, 20% {
+    opacity: 0;
+    transform: scale(.55);
+  }
+  32% {
+    opacity: .75;
+  }
+  58%, 100% {
+    opacity: 0;
+    transform: scale(1.65);
+  }
+}
+
+
+/* ---------------- TRANSMISSION / GRID STATUS PULSE ---------------- */
+
+.live-status:not(.live-status--verified) > i {
+  animation: signalPulse 2.5s ease-in-out infinite;
+}
+
+
+/* ---------------- SUBTLE PREMIUM YELLOW SHEEN ---------------- */
+
+.button--primary,
+.stage-nav button.is-current {
+  position: relative;
+  overflow: hidden;
+}
+
+.button--primary::after,
+.stage-nav button.is-current::after {
+  content: "";
+  position: absolute;
+  top: -60%;
+  bottom: -60%;
+  width: 22%;
+  left: -35%;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,.52),
+    transparent
+  );
+  transform: skewX(-18deg);
+  animation: yellowSweep 4.8s ease-in-out infinite;
+}
+
+@keyframes yellowSweep {
+  0%, 62% { left: -35%; opacity: 0; }
+  68% { opacity: .75; }
+  82% { left: 118%; opacity: .25; }
+  100% { left: 118%; opacity: 0; }
+}
+
+.rail__number {
+  animation: numberGlow 4s ease-in-out infinite;
+}
+
+@keyframes numberGlow {
+  0%, 100% {
+    text-shadow: 0 0 0 rgba(255,196,0,0);
+  }
+  50% {
+    text-shadow: 0 0 18px rgba(255,196,0,.24);
+  }
+}
+
+
+/* ---------------- RESPONSIVE FIT ---------------- */
+
+@media (max-height: 820px) and (min-width: 851px) {
+  .stage--panel {
+    padding-top: 18px;
+    padding-bottom: 88px;
+  }
+
+  .shell {
+    height: calc(100svh - 64px - 18px - 88px);
+  }
+
+  .panel {
+    gap: 10px;
+    padding-top: 18px;
+    padding-bottom: 14px;
+  }
+
+  .panel__header {
+    min-height: 38px;
+  }
+
+  .document-tabs {
+    padding-bottom: 7px;
+  }
+
+  .document-tabs button {
+    min-height: 32px;
+  }
+
+  .panel__actions {
+    min-height: 40px;
+  }
+}
+
+@media (max-width: 850px) {
+  .stage--panel {
+    min-height: 0;
+    padding: 22px 0 92px;
+  }
+
+  .shell {
+    height: auto;
+    max-height: none;
+  }
+
+  .panel {
+    height: auto;
+  }
+
+  .document-view.is-current {
+    overflow: visible;
+  }
+
+  .art-frame--letter,
+  .art-frame--ticket {
+    height: auto;
+  }
+
+  .art-frame--letter img,
+  .art-frame--ticket img {
+    width: min(100%, 680px);
+    max-height: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .topbar__status > i,
+  .grid-call-live,
+  .verified-ring::before,
+  .verified-ring::after,
+  .verified-ring > span,
+  .live-status:not(.live-status--verified) > i,
+  .button--primary::after,
+  .stage-nav button.is-current::after,
+  .rail__number {
+    animation: none !important;
+  }
+
+  .verified-ring {
+    background: #43d17d;
+  }
+
+  .verified-ring > span {
+    opacity: 1;
+    transform: none;
+  }
+}
