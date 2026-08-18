@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#00274C" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Chapter X // Full Throttle</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="track-noise" aria-hidden="true"></div>
+
+  <header class="broadcast-bar">
+    <div class="brand-lockup">
+      <span class="brand-slashes">///</span>
+      <span class="brand-title">CHAPTER X</span>
+      <span class="brand-sep">//</span>
+      <span class="brand-sub">FULL THROTTLE</span>
+    </div>
+    <div class="session-meta">
+      <span>RACE CONTROL</span>
+      <span class="live-dot"></span>
+      <span>GRID CALL</span>
+      <span id="headerDriver">DRIVER 13</span>
+    </div>
+  </header>
+
+  <main class="experience" id="experience">
+    <section class="stage stage--cover is-active" data-stage="cover" aria-label="Grid call">
+      <div class="hero-copy">
+        <div class="sector-label"><span>01</span> GRID ACCESS</div>
+        <p class="kicker">OFFICIAL RACE CONTROL TRANSMISSION</p>
+        <h1>YOU'VE BEEN<br><em>CALLED TO THE GRID.</em></h1>
+        <div class="driver-slate">
+          <div class="driver-number" id="heroNumber">13</div>
+          <div>
+            <span class="slate-label">DRIVER</span>
+            <strong id="heroName">ROHIT</strong>
+            <span class="slate-tag" id="heroTag">“BOOST BANDIT”</span>
+          </div>
+        </div>
+        <p class="hero-note">Your Chapter X briefing is sealed. Open when ready.</p>
+        <div class="start-sequence" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+
+      <div class="envelope-zone">
+        <button class="envelope" id="envelope" type="button" aria-label="Open Chapter X invitation">
+          <span class="envelope__back"></span>
+          <span class="envelope__paper">
+            <span class="paper-topline">RACE CONTROL // PRIORITY</span>
+            <span class="paper-mark">CX</span>
+            <span class="paper-title">OFFICIAL GRID SUMMONS</span>
+            <span class="paper-driver" id="paperDriver">ROHIT // 13</span>
+          </span>
+          <span class="envelope__pocket"></span>
+          <span class="envelope__flap"></span>
+          <span class="seal"><b>X</b><small>FULL THROTTLE</small></span>
+        </button>
+        <button class="open-cta" id="openCta" type="button">
+          <span class="cta-icon">▶</span>
+          BREAK SEAL // OPEN INVITATION
+        </button>
+      </div>
+
+      <div class="race-strip">
+        <span>QUALIFY</span><i></i><span>RACE</span><i></i><span>PODIUM</span>
+        <b>10 YEARS // ONE EXTREMELY UNNECESSARY COMPETITION</b>
+      </div>
+    </section>
+
+    <section class="stage stage--content" data-stage="poster" aria-label="Race night poster">
+      <div class="content-shell">
+        <aside class="stage-rail">
+          <span class="rail-number">02</span>
+          <span class="rail-title">RACE BRIEF</span>
+          <div class="rail-line"></div>
+          <span>FULL THROTTLE</span>
+          <span>BEST IN GAMES</span>
+        </aside>
+        <article class="media-panel">
+          <div class="panel-head">
+            <div><span>RACE CONTROL</span><strong>OFFICIAL INVITATION</strong></div>
+            <div class="panel-status"><i></i> TRANSMISSION RECEIVED</div>
+          </div>
+          <div class="image-frame poster-frame">
+            <img src="assets/invite-poster.png" alt="Chapter X Full Throttle invitation poster" />
+          </div>
+          <div class="panel-actions">
+            <button class="nav-btn ghost" type="button" data-prev>← BACK</button>
+            <button class="nav-btn primary" type="button" data-next="letter">OPEN RACE CONTROL LETTER →</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="stage stage--content" data-stage="letter" aria-label="Letter from Race Control">
+      <div class="content-shell">
+        <aside class="stage-rail">
+          <span class="rail-number">03</span>
+          <span class="rail-title">RACE CONTROL</span>
+          <div class="rail-line"></div>
+          <span>10 YEAR BRIEFING</span>
+          <span>CLASSIFIED: FRIENDS</span>
+        </aside>
+        <article class="media-panel">
+          <div class="panel-head">
+            <div><span>PRIVATE MESSAGE</span><strong>FROM RACE CONTROL</strong></div>
+            <div class="panel-status"><i></i> DRIVER VERIFIED</div>
+          </div>
+          <div class="image-frame letter-frame">
+            <img src="assets/race-control-letter.png" alt="Letter from Race Control" />
+          </div>
+          <div class="panel-actions">
+            <button class="nav-btn ghost" type="button" data-prev>← BACK</button>
+            <button class="nav-btn primary" type="button" data-next="ticket">REVEAL DRIVER PASS →</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="stage stage--content" data-stage="ticket" aria-label="Driver pass">
+      <div class="content-shell">
+        <aside class="stage-rail">
+          <span class="rail-number">04</span>
+          <span class="rail-title">GRID PASS</span>
+          <div class="rail-line"></div>
+          <span id="railDriver">ROHIT // 13</span>
+          <span>STATUS: CLEARED</span>
+        </aside>
+        <article class="media-panel ticket-panel">
+          <div class="panel-head">
+            <div><span>ENTRY CONFIRMED</span><strong id="driverTitle">ROHIT #13 // “BOOST BANDIT”</strong></div>
+            <div class="panel-status good"><i></i> GRID ACCESS GRANTED</div>
+          </div>
+          <div class="image-frame ticket-frame">
+            <img id="ticketImage" src="assets/tickets/rohit.png" alt="Personalized Chapter X driver ticket" />
+          </div>
+          <div class="panel-actions">
+            <button class="nav-btn ghost" type="button" data-prev>← BACK</button>
+            <a class="nav-btn primary" id="downloadTicket" href="assets/tickets/rohit.png" download>DOWNLOAD DRIVER PASS ↓</a>
+            <button class="nav-btn ghost" id="restart" type="button">REPLAY</button>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <div class="stage-progress" aria-label="Invitation progress">
+    <button class="is-current" type="button" data-jump="cover"><b>01</b><span>GRID CALL</span></button>
+    <button type="button" data-jump="poster"><b>02</b><span>INVITE</span></button>
+    <button type="button" data-jump="letter"><b>03</b><span>LETTER</span></button>
+    <button type="button" data-jump="ticket"><b>04</b><span>PASS</span></button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
