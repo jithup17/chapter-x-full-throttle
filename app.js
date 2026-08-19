@@ -1,3 +1,20 @@
+/* =========================================================
+   THE ROSTER
+
+   TO ADD ANOTHER DRIVER — three steps, nothing else:
+
+   1. Add a block below. `order` controls grid position.
+   2. Drop the portrait in assets/drivers/<key>.png  (720x900,
+      head roughly in the top third — the card crops to 4:5).
+      .jpg also works; the loader falls back automatically.
+   3. Copy any existing folder (e.g. /omkar/index.html) to
+      /<key>/index.html and change the driver name in the
+      redirect so <site>/<key>/ opens their personalized page.
+
+   The grid re-flows its column count on its own — 6, 7, 8 or
+   more rivals all lay out without touching the CSS.
+========================================================= */
+
 const DRIVERS = {
   rohit: {
     order: 1,
@@ -9,7 +26,13 @@ const DRIVERS = {
     threat: "QUESTIONABLE",
     control: "Do not underestimate.",
     note: "Claims this is “just for fun.” Race Control has reviewed that statement and remains unconvinced.",
-    portrait: "assets/drivers/rohit.jpg",
+    stats: [
+      ["CONFIDENCE", "140%"],
+      ["BRAKING", "OPTIONAL"],
+      ["APEX HIT RATE", "SELF-REPORTED"],
+      ["EXCUSES PRE-LOADED", "7"]
+    ],
+    portrait: "assets/drivers/rohit.png",
     ticket: "assets/tickets/rohit.png"
   },
 
@@ -23,7 +46,13 @@ const DRIVERS = {
     threat: "CALM BUT CONCERNING",
     control: "Smooth is still fast.",
     note: "Minimal drama. Maximum possibility of quietly appearing on the podium.",
-    portrait: "assets/drivers/siva.jpg",
+    stats: [
+      ["SMOOTHNESS", "9.4/10"],
+      ["DRAMA", "0.0"],
+      ["OVERTAKES", "QUIET BUT REAL"],
+      ["PODIUM ODDS", "AWKWARDLY HIGH"]
+    ],
+    portrait: "assets/drivers/siva.png",
     ticket: "assets/tickets/siva.png"
   },
 
@@ -37,7 +66,13 @@ const DRIVERS = {
     threat: "UNCONFIRMED",
     control: "Telemetry remains inconclusive.",
     note: "Could be here to win. Could be here for snacks. Either way, the apexes have been warned.",
-    portrait: "assets/drivers/shashank.jpg",
+    stats: [
+      ["CORNER ENTRY", "COMMITTED"],
+      ["CORNER EXIT", "PENDING"],
+      ["ENGINE NOISES MADE", "212"],
+      ["SNACK BREAKS", "4"]
+    ],
+    portrait: "assets/drivers/shashank.png",
     ticket: "assets/tickets/shashank.png"
   },
 
@@ -51,7 +86,13 @@ const DRIVERS = {
     threat: "DECEPTIVELY HIGH",
     control: "Do not trust the casual approach.",
     note: "Arrived with “Victory Mode” already enabled. Race Control has questions.",
-    portrait: "assets/drivers/vijay.jpg",
+    stats: [
+      ["LAUNCH", "INSTANT"],
+      ["CASUAL ACT", "10/10"],
+      ["VICTORY MODE", "PRE-ENABLED"],
+      ["HUMILITY", "BUFFERING"]
+    ],
+    portrait: "assets/drivers/vijay.png",
     ticket: "assets/tickets/vijay.png"
   },
 
@@ -65,7 +106,13 @@ const DRIVERS = {
     threat: "DEVELOPING",
     control: "Keep under observation.",
     note: "Strategy pending. Confidence, however, appears fully deployed.",
-    portrait: "assets/drivers/omkar.jpg",
+    stats: [
+      ["STRATEGY", "LOADING…"],
+      ["CONFIDENCE", "FULLY DEPLOYED"],
+      ["WAGON ENERGY", "MAXIMUM"],
+      ["PLAN B", "ALSO PLAN A"]
+    ],
+    portrait: "assets/drivers/omkar.png",
     ticket: "assets/tickets/omkar.png"
   },
 
@@ -79,8 +126,53 @@ const DRIVERS = {
     threat: "UNKNOWN",
     control: "Proceed with unnecessary caution.",
     note: "No useful telemetry. Somehow that makes this worse.",
-    portrait: "assets/drivers/likith.jpg",
+    stats: [
+      ["TELEMETRY", "NOT FOUND"],
+      ["MYSTERY", "11/10"],
+      ["SUNGLASSES", "INDOORS"],
+      ["KNOWN WEAKNESS", "STILL LOOKING"]
+    ],
+    portrait: "assets/drivers/likith.png",
     ticket: "assets/tickets/likith.png"
+  },
+
+  karthik: {
+    order: 7,
+    name: "Karthik",
+    surname: "Raghu",
+    number: "03",
+    tagline: "Seoul Streak",
+    paddock: "Launch Control",
+    threat: "QUIETLY SERIOUS",
+    control: "Watch the late braking.",
+    note: "Calm on the grid. Telemetry suggests considerably more pace than advertised.",
+    stats: [
+      ["LATE BRAKING", "ALARMING"],
+      ["ADVERTISED PACE", "MODEST"],
+      ["ACTUAL PACE", "NOT MODEST"],
+      ["CALM UNDER FIRE", "97%"]
+    ],
+    portrait: "assets/drivers/karthik.jpg",
+    ticket: "assets/tickets/karthik.png"  },
+
+  srivatsa: {
+    order: 8,
+    name: "Srivatsa",
+    surname: "GR",
+    number: "10",
+    tagline: "Manual Maverick",
+    paddock: "Three-Pedal Purist",
+    threat: "MANUALLY ELEVATED",
+    control: "He will bring up gear ratios.",
+    note: "Refuses to accept that paddle shifters are real. Race Control stopped arguing and simply handed him the keys.",
+    stats: [
+      ["PEDALS USED", "ALL THREE"],
+      ["HEEL-TOE", "UNPROMPTED"],
+      ["AUTOMATICS INSULTED", "46"],
+      ["CLUTCH CONTROL", "SMUG"]
+    ],
+    portrait: "assets/drivers/srivatsa.png",
+    ticket: "assets/tickets/srivatsa.png"
   }
 };
 
@@ -137,7 +229,7 @@ $("#ticketHeading").textContent =
 $("#ticketPaddock").textContent = `PADDOCK // ${visitor.paddock.toUpperCase()}`;
 
 const ticketImage = $("#ticketImage");
-ticketImage.src = `${visitor.ticket}?v=9`;
+ticketImage.src = `${visitor.ticket}?v=12`;
 ticketImage.alt = `${visitor.name} #${visitor.number} — Chapter X driver pass`;
 
 const downloadTicket = $("#downloadTicket");
@@ -156,6 +248,12 @@ const rivals = Object.entries(DRIVERS)
   .filter(([key]) => key !== visitorKey)
   .sort((a, b) => a[1].order - b[1].order);
 
+const rivalCount = rivals.length;
+const railRivalCount = $("#railRivalCount");
+const scoutingRivalCount = $("#scoutingRivalCount");
+if (railRivalCount) railRivalCount.textContent = `${rivalCount} RIVALS CONFIRMED`;
+if (scoutingRivalCount) scoutingRivalCount.textContent = `SCOUTING REPORT // ${rivalCount} RIVALS CONFIRMED`;
+
 grid.innerHTML = rivals
   .map(([key, d]) => {
     return `
@@ -167,7 +265,7 @@ grid.innerHTML = rivals
         aria-label="Open profile for ${safe(d.name)}"
       >
         <span class="driver-card__portrait">
-          <img src="${safe(d.portrait)}?v=9"
+          <img src="${safe(d.portrait)}?v=12"
                alt="${safe(d.name)} — car ${safe(d.number)}">
         </span>
 
@@ -194,9 +292,18 @@ grid.innerHTML = rivals
             <b>${safe(d.threat)}</b>
           </span>
 
-          <span class="profile-row">
-            <label>RACE CONTROL</label>
-            <em>${safe(d.control)}</em>
+          <span class="profile-stats">
+            <label>TELEMETRY</label>
+            <span class="profile-stats__grid">
+              ${(d.stats || [])
+                .map(([statLabel, statValue]) => `
+                  <span class="stat">
+                    <i>${safe(statLabel)}</i>
+                    <b>${safe(statValue)}</b>
+                  </span>
+                `)
+                .join("")}
+            </span>
           </span>
 
           <span class="profile-note">
@@ -211,13 +318,76 @@ grid.innerHTML = rivals
 
           <span class="profile-cleared">
             <i></i>
-            DRIVER CLEARED FOR COMPETITION
+            ${safe(d.control)}
           </span>
         </span>
       </button>
     `;
   })
   .join("");
+
+/* ---------------------------------------------------------
+   Column count follows the roster size, so adding a driver
+   never leaves a lonely orphan card on its own row.
+   Tablet/mobile counts stay under CSS control.
+--------------------------------------------------------- */
+
+function idealColumns(n) {
+  if (n <= 4) return n;   //  up to 4 -> single starting row
+  if (n === 5) return 3;  //  3 + 2
+  if (n === 6) return 3;  //  3 + 3
+  if (n === 7) return 4;  //  4 + 3
+  if (n === 8) return 4;  //  4 + 4
+  if (n === 9) return 3;  //  3 x 3
+  return 4;
+}
+
+/*
+  data-cols must match what actually renders, not just the roster,
+  or the narrow-card type tweaks leak onto wide phone/tablet cards.
+*/
+function applyGridColumns() {
+  const width = window.innerWidth;
+
+  const cols = width <= 650
+    ? 1
+    : width <= 1180
+      ? Math.min(2, rivalCount)
+      : idealColumns(rivalCount);
+
+  grid.style.setProperty("--grid-cols", cols);
+  grid.dataset.cols = String(cols);
+}
+
+applyGridColumns();
+
+let gridResizeTimer;
+window.addEventListener("resize", () => {
+  clearTimeout(gridResizeTimer);
+  gridResizeTimer = setTimeout(applyGridColumns, 120);
+});
+
+
+/* ---------------------------------------------------------
+   Portraits are .png; a couple are still .jpg. Rather than
+   showing a broken image, try the other extension once.
+--------------------------------------------------------- */
+
+$$(".driver-card__portrait img", grid).forEach(img => {
+  img.addEventListener("error", () => {
+    if (img.dataset.triedFallback) return;
+    img.dataset.triedFallback = "1";
+
+    const swapped = img.getAttribute("src").replace(
+      /\.(png|jpe?g)(\?.*)?$/i,
+      (_, ext, query) =>
+        (ext.toLowerCase() === "png" ? ".jpg" : ".png") + (query || "")
+    );
+
+    if (swapped !== img.getAttribute("src")) img.src = swapped;
+  });
+});
+
 
 $$("[data-driver-card]").forEach(card => {
   card.addEventListener("click", () => {
@@ -418,10 +588,10 @@ if (STAGES.includes(requestedStage)) {
 ========================================================= */
 
 [
-  "assets/invite-poster.png?v=9",
-  "assets/race-control-letter.png?v=9",
-  `${visitor.ticket}?v=9`,
-  ...Object.values(DRIVERS).map(d => `${d.portrait}?v=9`)
+  "assets/invite-poster.png?v=12",
+  "assets/race-control-letter.png?v=12",
+  `${visitor.ticket}?v=12`,
+  ...Object.values(DRIVERS).map(d => `${d.portrait}?v=12`)
 ].forEach(src => {
   const img = new Image();
   img.src = src;

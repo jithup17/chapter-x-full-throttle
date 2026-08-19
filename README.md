@@ -25,12 +25,13 @@ Replace `YOUR-USERNAME` if needed:
 - Vijay: `https://YOUR-USERNAME.github.io/chapter-x-full-throttle/?driver=vijay`
 - Omkar: `https://YOUR-USERNAME.github.io/chapter-x-full-throttle/?driver=omkar`
 - Likith: `https://YOUR-USERNAME.github.io/chapter-x-full-throttle/?driver=likith`
+- Karthik: `https://YOUR-USERNAME.github.io/chapter-x-full-throttle/?driver=karthik`
 
 For the repo shown earlier, the live links use:
 `https://jithup17.github.io/chapter-x-full-throttle/?driver=...`
 
 ## The Grid
-The six portraits in `assets/drivers/` were extracted directly from:
+The seven portraits in `assets/drivers/` were extracted directly from:
 `Chapter_X_Full_Throttle_GRID_FIXED_FINAL(1).mp4`
 
 Desktop:
@@ -81,10 +82,10 @@ The Grid now excludes the visitor themselves.
 Examples:
 - Rohit sees Siva Ram, Shashank, Vijay, Omkar, and Likith.
 - Siva Ram sees Rohit, Shashank, Vijay, Omkar, and Likith.
-- Every personalized link shows exactly 5 rivals.
+- Every personalized link shows exactly 6 rivals.
 
 Grid wording is now:
-- `SCOUTING REPORT // 5 RIVALS CONFIRMED`
+- `SCOUTING REPORT // 6 RIVALS CONFIRMED`
 - `MEET THE COMPETITION`
 
 The old `YOUR GARAGE` badge is no longer rendered because the visitor's own card is not shown in the competition section.
@@ -129,3 +130,12 @@ Desktop Race Control now:
 
 ## v9 date update
 The live site now shows **AUG 29** together with **4:00 PM** on Grid Call, Invite, Race Control, and the desktop status bar.
+
+
+## v10 Karthik + seven-driver grid
+- Added Karthik Raghu (#03, “Seoul Streak”) as the seventh driver.
+- Added Karthik portrait, personalized route, and driver pass asset.
+- Each invitation now shows six rivals.
+- Desktop grid is a balanced 3×2 layout; medium screens use 2×3; phones use a single column.
+- Added wrap/overflow protection so long names, taglines, and profile text do not overlap.
+- Driver portraits remain position-locked while card/profile text effects animate.

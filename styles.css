@@ -2356,4 +2356,363 @@ img {
     max-height: none !important;
   }
 }
-\n\n/* =========================================================\n   v9 // EVENT DATE + ARRIVAL TIME\n========================================================= */\n.event-clock { color: var(--yellow); font-size: 8px; font-weight: 1000; letter-spacing: .12em; white-space: nowrap; }\n.event-brief { width: fit-content; display:flex; align-items:center; gap:14px; margin-top:22px; padding:10px 14px; border:1px solid rgba(255,196,0,.28); background:linear-gradient(90deg,rgba(255,196,0,.075),rgba(255,255,255,.02)); }\n.event-brief > span,.event-ribbon > span { display:grid; gap:2px; }\n.event-brief small,.event-ribbon small { color:#7f93a5; font-size:6px; font-weight:1000; letter-spacing:.15em; }\n.event-brief strong,.event-ribbon strong { color:white; font-size:11px; line-height:1; font-style:italic; letter-spacing:.06em; }\n.event-brief > i,.event-ribbon > i { width:5px; height:5px; flex:0 0 5px; border-radius:50%; background:var(--yellow); box-shadow:0 0 10px rgba(255,196,0,.65); animation:signalPulse 2.2s ease-in-out infinite; }\n.event-ribbon { min-height:38px; display:flex; align-items:center; gap:12px; padding:7px 12px; border:1px solid rgba(255,255,255,.10); border-left:3px solid var(--yellow); background:linear-gradient(90deg,rgba(255,196,0,.055),transparent 36%),rgba(255,255,255,.018); }\n.event-ribbon > b { margin-left:auto; color:#8496a7; font-size:6px; letter-spacing:.14em; }\n.event-ribbon--compact { min-height:34px; width:fit-content; padding-block:5px; }\n.race-panel { grid-template-rows:auto auto auto minmax(0,1fr) auto !important; }\n@media (max-height:820px) and (min-width:851px){ .event-ribbon--compact{min-height:30px;padding-block:4px}.event-ribbon--compact strong{font-size:9px}.race-panel .document-view[data-doc-view="letter"] .art-frame--letter{height:31svh !important;} }\n@media (max-width:850px){ .event-clock{display:none}.event-ribbon{flex-wrap:wrap}.event-ribbon>b{width:100%;margin-left:0} }\n
+
+
+/* =========================================================
+   v9 // EVENT DATE + ARRIVAL TIME
+========================================================= */
+.event-clock { color: var(--yellow); font-size: 8px; font-weight: 1000; letter-spacing: .12em; white-space: nowrap; }
+.event-brief { width: fit-content; display:flex; align-items:center; gap:14px; margin-top:22px; padding:10px 14px; border:1px solid rgba(255,196,0,.28); background:linear-gradient(90deg,rgba(255,196,0,.075),rgba(255,255,255,.02)); }
+.event-brief > span,.event-ribbon > span { display:grid; gap:2px; }
+.event-brief small,.event-ribbon small { color:#7f93a5; font-size:6px; font-weight:1000; letter-spacing:.15em; }
+.event-brief strong,.event-ribbon strong { color:white; font-size:11px; line-height:1; font-style:italic; letter-spacing:.06em; }
+.event-brief > i,.event-ribbon > i { width:5px; height:5px; flex:0 0 5px; border-radius:50%; background:var(--yellow); box-shadow:0 0 10px rgba(255,196,0,.65); animation:signalPulse 2.2s ease-in-out infinite; }
+.event-ribbon { min-height:38px; display:flex; align-items:center; gap:12px; padding:7px 12px; border:1px solid rgba(255,255,255,.10); border-left:3px solid var(--yellow); background:linear-gradient(90deg,rgba(255,196,0,.055),transparent 36%),rgba(255,255,255,.018); }
+.event-ribbon > b { margin-left:auto; color:#8496a7; font-size:6px; letter-spacing:.14em; }
+.event-ribbon--compact { min-height:34px; width:fit-content; padding-block:5px; }
+.race-panel { grid-template-rows:auto auto auto minmax(0,1fr) auto !important; }
+@media (max-height:820px) and (min-width:851px){ .event-ribbon--compact{min-height:30px;padding-block:4px}.event-ribbon--compact strong{font-size:9px}.race-panel .document-view[data-doc-view="letter"] .art-frame--letter{height:31svh !important;} }
+@media (max-width:850px){ .event-clock{display:none}.event-ribbon{flex-wrap:wrap}.event-ribbon>b{width:100%;margin-left:0} }
+
+
+/* =========================================================
+   v10 // 7-DRIVER GRID + LAYOUT HARDENING
+========================================================= */
+
+/* Six rivals per personalized page: 3 x 2 on full desktop. */
+.driver-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: minmax(360px, auto);
+}
+
+.driver-card {
+  min-height: 360px;
+}
+
+/* Long names/status text must never collide with adjacent content. */
+.driver-card__front strong,
+.driver-card__front > span,
+.driver-card__front em,
+.driver-card__profile > strong,
+.profile-surname,
+.profile-row b,
+.profile-row em,
+.profile-note span,
+.profile-paddock b {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.driver-card__front strong {
+  font-size: clamp(23px, 1.8vw, 34px);
+}
+
+.driver-card__profile {
+  overflow: hidden;
+}
+
+/* Keep portraits fixed; only the profile/text treatment changes. */
+.driver-card__portrait img,
+.driver-card:hover .driver-card__portrait img,
+.driver-card:focus-visible .driver-card__portrait img,
+.driver-card.is-open .driver-card__portrait img {
+  transform: none !important;
+}
+
+@media (max-width: 1180px) {
+  .driver-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: minmax(370px, auto);
+  }
+  .driver-card { min-height: 370px; }
+}
+
+@media (max-width: 650px) {
+  .driver-grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: minmax(410px, auto);
+  }
+  .driver-card { min-height: 410px; }
+}
+
+
+/* =========================================================
+   v11 // THE GRID: NO OVERLAP, ANY NUMBER OF DRIVERS
+========================================================= */
+
+/*
+  Cover / Invite / Race Control deliberately lock the shell to the
+  viewport so a single piece of artwork fits on one screen:
+
+      .shell { height: calc(100svh - 64px - 26px - 96px) }
+      .panel { height: 100% }
+
+  The Grid is the one stage that does NOT have a fixed amount of
+  content — it grows with the roster. Under the viewport lock the
+  card track was squashed to whatever height was left over, and the
+  cards simply overflowed it: the second row painted straight over
+  the RACE CONTROL / REPLAY buttons and the fixed bottom nav.
+
+  So this stage opts out of the lock and flows naturally instead.
+*/
+
+.stage--grid.stage--panel {
+  min-height: 0;
+  padding-bottom: 48px;       /* + .experience 86px = clears the fixed .stage-nav */
+}
+
+.stage--grid .shell,
+.shell--grid {
+  height: auto;
+  max-height: none;
+  min-height: 0;
+}
+
+.stage--grid .panel,
+.grid-panel {
+  height: auto;
+  min-height: 0;
+  grid-template-rows: auto auto auto auto;
+  overflow: visible;
+}
+
+/* The footer buttons now sit below the cards, never under them. */
+.stage--grid .panel__actions {
+  position: relative;
+  z-index: 8;
+  margin-top: 4px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,.09);
+}
+
+
+/* ---------------- ROSTER-AWARE COLUMNS ---------------- */
+
+/*
+  --grid-cols is set by app.js from the rival count, so a 7th or
+  8th driver re-flows on its own. Cards are sized by ratio rather
+  than a fixed min-height, so narrower columns stay in proportion
+  instead of stretching into the row below.
+*/
+
+.driver-grid {
+  grid-template-columns: repeat(var(--grid-cols, 3), minmax(0, 1fr));
+  grid-auto-rows: auto;
+  align-content: start;
+}
+
+.driver-card {
+  height: auto;
+  min-height: 320px;
+  max-height: 520px;
+  aspect-ratio: 4 / 5;        /* matches the 720x900 portraits */
+}
+
+/* Four-up cards are narrower — tighten the type so nothing collides. */
+.driver-grid[data-cols="4"] .driver-card__number { font-size: 54px; }
+.driver-grid[data-cols="4"] .driver-card__front { padding: 17px; }
+.driver-grid[data-cols="4"] .driver-card__front strong { font-size: clamp(21px, 1.5vw, 29px); }
+.driver-grid[data-cols="4"] .driver-card__profile { padding: 15px 15px 13px 17px; }
+.driver-grid[data-cols="4"] .driver-card__profile > strong { font-size: 24px; }
+.driver-grid[data-cols="4"] .profile-surname { margin-bottom: 7px; }
+.driver-grid[data-cols="4"] .profile-row {
+  grid-template-columns: 70px minmax(0, 1fr);
+  gap: 8px;
+  padding: 6px 0;
+}
+.driver-grid[data-cols="4"] .profile-note,
+.driver-grid[data-cols="4"] .profile-paddock { padding: 6px 0; }
+.driver-grid[data-cols="4"] .profile-note span { font-size: 8px; }
+
+/* Last resort: a very long paddock note trims rather than spills. */
+.profile-note span {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+
+/* ---------------- RESPONSIVE TIERS ---------------- */
+
+@media (max-width: 1180px) {
+  .driver-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .driver-card { max-height: 470px; }
+}
+
+@media (max-width: 650px) {
+  .driver-grid { grid-template-columns: 1fr; }
+
+  .driver-card {
+    aspect-ratio: auto;
+    min-height: 400px;
+    max-height: none;
+  }
+
+  .stage--grid.stage--panel { padding-bottom: 40px; }
+}
+
+/*
+  The grid is the only stage that scrolls, so the fixed bottom nav
+  now passes over card artwork. A soft scrim anchors it instead of
+  letting it look like it collided with someone's face.
+*/
+.stage--grid.is-active::after {
+  content: "";
+  position: fixed;
+  z-index: 110;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 132px;
+  background: linear-gradient(180deg, rgba(2,8,16,0) 0%, rgba(2,8,16,.62) 46%, rgba(2,8,16,.92) 100%);
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   v12 // INVITE RIBBON FIX + PROFILE TELEMETRY + 8TH DRIVER
+========================================================= */
+
+/*
+  .panel declares three rows (auto / minmax(0,1fr) / auto) but the
+  Invite panel has FOUR children: header, ribbon, poster, footer.
+  The ribbon landed in the 1fr track, and because the poster's
+  min-height (610px) plus the other auto rows already exceeded the
+  locked panel height, that track resolved to 0px — so RACE DATE /
+  ARRIVAL was clipped away. Declare the fourth row and let the
+  poster be the flexible one instead of the ribbon.
+*/
+
+[data-stage="invite"] .panel {
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+}
+
+[data-stage="invite"] .event-ribbon {
+  flex: 0 0 auto;
+  align-self: start;
+}
+
+[data-stage="invite"] .art-frame--poster {
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+[data-stage="invite"] .art-frame--poster img {
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+
+/* ---------------- PROFILE TELEMETRY ---------------- */
+
+.profile-stats {
+  display: grid;
+  gap: 5px;
+  padding: 7px 0;
+  border-top: 1px solid rgba(255,255,255,.10);
+}
+
+.profile-stats__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px 10px;
+}
+
+.profile-stats .stat {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+  padding: 4px 6px;
+  border-left: 2px solid rgba(255,196,0,.42);
+  background: rgba(255,255,255,.035);
+}
+
+.profile-stats .stat i {
+  color: #7f94a7;
+  font-size: 5px;
+  font-style: normal;
+  font-weight: 1000;
+  letter-spacing: .12em;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.profile-stats .stat b {
+  color: var(--yellow);
+  font-size: 8px;
+  font-style: italic;
+  letter-spacing: .04em;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+/* The advisory now closes the profile, so let it wrap. */
+.profile-cleared {
+  align-items: flex-start;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+.profile-cleared i {
+  flex: 0 0 5px;
+  margin-top: 3px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--yellow);
+}
+
+
+/* ---------------- EIGHT DRIVERS: TIGHTER CARDS ---------------- */
+
+/*
+  Seven rivals go four-up, so the cards are narrower than before.
+  Trade a little portrait height for profile breathing room.
+*/
+.driver-grid[data-cols="4"] .driver-card {
+  aspect-ratio: 3 / 4;
+  max-height: 480px;
+}
+
+.driver-grid[data-cols="4"] .profile-stats { padding: 5px 0; }
+.driver-grid[data-cols="4"] .profile-stats__grid { gap: 4px 7px; }
+.driver-grid[data-cols="4"] .profile-stats .stat { padding: 3px 5px; }
+.driver-grid[data-cols="4"] .profile-stats .stat b { font-size: 7px; }
+.driver-grid[data-cols="4"] .profile-note span { -webkit-line-clamp: 3; }
+.driver-grid[data-cols="4"] .driver-card__profile { padding: 13px 13px 12px 15px; }
+.driver-grid[data-cols="4"] .driver-card__profile > strong { font-size: 21px; }
+
+/*
+  data-cols is now authoritative (app.js keeps it in sync with the
+  viewport), so the responsive tiers only need to guard against a
+  no-JS render.
+*/
+@media (max-width: 650px) {
+  .driver-grid[data-cols="1"] .driver-card {
+    aspect-ratio: auto;
+    min-height: 430px;
+    max-height: none;
+  }
+}
+
+/* Match the other section labels (the shared rule predates this block). */
+.profile-stats > label {
+  color: #7f94a7;
+  font-size: 5.5px;
+  line-height: 1.5;
+  font-weight: 1000;
+  letter-spacing: .14em;
+}
+
+/* Let the note absorb slack so the advisory isn't marooned. */
+.profile-note { align-content: start; }
+.driver-card__profile > .profile-note { flex: 1 1 auto; }
